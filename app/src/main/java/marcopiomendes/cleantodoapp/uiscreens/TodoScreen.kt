@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,6 +24,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -40,8 +40,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -50,13 +52,16 @@ fun TodoScreen(todoViewModel: TodoViewModel) {
     var task by remember { mutableStateOf("") }
     val todoList by todoViewModel.todos.collectAsStateWithLifecycle()
 
+    val totalTasks = todoList.size
+    val doneTasks = todoList.count { it.isDone }
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Todo App List") },
+                title = { Text("Tasks App") },
                 colors = TopAppBarDefaults.topAppBarColors (
-                    containerColor = Color.Red,
-                    titleContentColor = Color.White
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             )
         }
@@ -75,14 +80,13 @@ fun TodoScreen(todoViewModel: TodoViewModel) {
                     value = task,
                     onValueChange = { task = it },
                     modifier = Modifier.weight(1f),
-                    placeholder = { Text("Task") },
+                    placeholder = { Text("New Task") },
                     shape = RoundedCornerShape(22.dp),
                     colors = TextFieldDefaults.colors(
-                        focusedIndicatorColor = Color.Red,
-                        unfocusedIndicatorColor = Color.Red,
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedTextColor = Color.Black
+                        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.outline,
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent
                     )
                 )
                 Button(
@@ -92,13 +96,30 @@ fun TodoScreen(todoViewModel: TodoViewModel) {
                             task = ""
                         }
                     },
-                    colors = ButtonDefaults.buttonColors(Color.Red)
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
                 ) {
                     Text("Add")
                 }
             }
+            
             Spacer(modifier = Modifier.height(16.dp))
-            HorizontalDivider(color = Color.Red)
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "$doneTasks of $totalTasks completed",
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             Spacer(modifier = Modifier.height(12.dp))
 
             LazyColumn(
@@ -122,7 +143,7 @@ fun TodoScreen(todoViewModel: TodoViewModel) {
                             Checkbox(
                                 checked = todo.isDone,
                                 onCheckedChange = { todoViewModel.toggleTodoDone(todo) },
-                                colors = CheckboxDefaults.colors(Color.Red)
+                                colors = CheckboxDefaults.colors(MaterialTheme.colorScheme.primary)
                             )
                             if (isEditing) {
                                 OutlinedTextField(
@@ -131,11 +152,8 @@ fun TodoScreen(todoViewModel: TodoViewModel) {
                                     modifier = Modifier.weight(1f),
                                     shape = RoundedCornerShape(22.dp),
                                     colors = TextFieldDefaults.colors(
-                                        focusedIndicatorColor = Color.Red,
-                                        unfocusedIndicatorColor = Color.Red,
-                                        focusedContainerColor = Color.White,
-                                        unfocusedContainerColor = Color.White,
-                                        focusedTextColor = Color.Black
+                                        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                                        unfocusedIndicatorColor = MaterialTheme.colorScheme.outline
                                     )
                                 )
                                 Button(
@@ -144,7 +162,7 @@ fun TodoScreen(todoViewModel: TodoViewModel) {
                                         isEditing = false
                                     },
                                     modifier = Modifier.padding(start = 4.dp),
-                                    colors = ButtonDefaults.buttonColors(Color.Red)
+                                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
 
                                 ) {
                                     Text("Save")
@@ -155,7 +173,10 @@ fun TodoScreen(todoViewModel: TodoViewModel) {
                                     text = todo.title,
                                     modifier = Modifier.padding(start = 8.dp).weight(1f),
                                     style = if (todo.isDone)
-                                        LocalTextStyle.current.copy(textDecoration = TextDecoration.LineThrough)
+                                        LocalTextStyle.current.copy(
+                                            textDecoration = TextDecoration.LineThrough,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                                        )
                                         else LocalTextStyle.current
                                 )
                             }
@@ -165,12 +186,20 @@ fun TodoScreen(todoViewModel: TodoViewModel) {
                                 if (!isEditing) newTitle = todo.title
                                 isEditing = !isEditing
                             }) {
-                                Icon(Icons.Default.Edit, contentDescription = "Edit", tint = Color.Red)
+                                Icon(
+                                    Icons.Default.Edit,
+                                    contentDescription = "Edit",
+                                    tint = MaterialTheme.colorScheme.secondary
+                                )
                             }
                             IconButton(onClick = {
                                 todoViewModel.deleteTodo(todo)
                             }) {
-                                Icon(Icons.Default.Delete, contentDescription = "Delete", tint = Color.Red)
+                                Icon(
+                                    Icons.Default.Delete,
+                                    contentDescription = "Delete",
+                                    tint = MaterialTheme.colorScheme.error
+                                )
                             }
                         }
                     }

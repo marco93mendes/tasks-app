@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Clean Todo App"
+rootProject.name = "Tasks App"
 include(":app")

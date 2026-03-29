@@ -114,7 +114,10 @@ fun TodoScreen(todoViewModel: TodoViewModel) {
                         modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.weight(1f)
+                        )
                         {
                             Checkbox(
                                 checked = todo.isDone,
@@ -125,7 +128,7 @@ fun TodoScreen(todoViewModel: TodoViewModel) {
                                 OutlinedTextField(
                                     value = newTitle,
                                     onValueChange = { newTitle = it },
-                                    modifier = Modifier.width(160.dp),
+                                    modifier = Modifier.weight(1f),
                                     shape = RoundedCornerShape(22.dp),
                                     colors = TextFieldDefaults.colors(
                                         focusedIndicatorColor = Color.Red,
@@ -150,7 +153,7 @@ fun TodoScreen(todoViewModel: TodoViewModel) {
                             else {
                                 Text(
                                     text = todo.title,
-                                    modifier = Modifier.padding(start = 8.dp),
+                                    modifier = Modifier.padding(start = 8.dp).weight(1f),
                                     style = if (todo.isDone)
                                         LocalTextStyle.current.copy(textDecoration = TextDecoration.LineThrough)
                                         else LocalTextStyle.current

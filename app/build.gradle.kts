@@ -6,13 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "marcopiomendes.cleantodoapp"
-    compileSdk {
-        version = release(36)
-    }
+    namespace = "marcopiomendes.tasksapp"
+    compileSdk = 36
 
     defaultConfig {
-        applicationId = "marcopiomendes.cleantodoapp"
+        applicationId = "marcopiomendes.tasksapp"
         minSdk = 26
         targetSdk = 36
         versionCode = 1

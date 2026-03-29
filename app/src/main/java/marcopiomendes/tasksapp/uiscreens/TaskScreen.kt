@@ -1,4 +1,4 @@
-package marcopiomendes.cleantodoapp.uiscreens
+package marcopiomendes.tasksapp.uiscreens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,7 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import marcopiomendes.cleantodoapp.presentation.TodoViewModel
+import marcopiomendes.tasksapp.presentation.TaskViewModel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -43,17 +43,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun TodoScreen(todoViewModel: TodoViewModel) {
-    var task by remember { mutableStateOf("") }
-    val todoList by todoViewModel.todos.collectAsStateWithLifecycle()
+fun TaskScreen(taskViewModel: TaskViewModel) {
+    var taskText by remember { mutableStateOf("") }
+    val taskList by taskViewModel.tasks.collectAsStateWithLifecycle()
 
-    val totalTasks = todoList.size
-    val doneTasks = todoList.count { it.isDone }
+    val totalTasks = taskList.size
+    val doneTasks = taskList.count { it.isDone }
 
     Scaffold(
         topBar = {
@@ -77,8 +76,8 @@ fun TodoScreen(todoViewModel: TodoViewModel) {
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 OutlinedTextField(
-                    value = task,
-                    onValueChange = { task = it },
+                    value = taskText,
+                    onValueChange = { taskText = it },
                     modifier = Modifier.weight(1f),
                     placeholder = { Text("New Task") },
                     shape = RoundedCornerShape(22.dp),
@@ -91,9 +90,9 @@ fun TodoScreen(todoViewModel: TodoViewModel) {
                 )
                 Button(
                     onClick = {
-                        if (task.isNotBlank()) {
-                            todoViewModel.insertTodo(task)
-                            task = ""
+                        if (taskText.isNotBlank()) {
+                            taskViewModel.insertTask(taskText)
+                            taskText = ""
                         }
                     },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
@@ -126,9 +125,9 @@ fun TodoScreen(todoViewModel: TodoViewModel) {
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                items(items =  todoList, key = { it.id }) { todo ->
-                    var isEditing by remember (todo.id) { mutableStateOf(false) }
-                    var newTitle by remember (todo.id) { mutableStateOf(todo.title) }
+                items(items =  taskList, key = { it.id }) { taskItem ->
+                    var isEditing by remember (taskItem.id) { mutableStateOf(false) }
+                    var newTitle by remember (taskItem.id) { mutableStateOf(taskItem.title) }
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -141,8 +140,8 @@ fun TodoScreen(todoViewModel: TodoViewModel) {
                         )
                         {
                             Checkbox(
-                                checked = todo.isDone,
-                                onCheckedChange = { todoViewModel.toggleTodoDone(todo) },
+                                checked = taskItem.isDone,
+                                onCheckedChange = { taskViewModel.toggleTaskDone(taskItem) },
                                 colors = CheckboxDefaults.colors(MaterialTheme.colorScheme.primary)
                             )
                             if (isEditing) {
@@ -158,7 +157,7 @@ fun TodoScreen(todoViewModel: TodoViewModel) {
                                 )
                                 Button(
                                     onClick = {
-                                        todoViewModel.editTodo(todo, newTitle)
+                                        taskViewModel.editTask(taskItem, newTitle)
                                         isEditing = false
                                     },
                                     modifier = Modifier.padding(start = 4.dp),
@@ -170,9 +169,9 @@ fun TodoScreen(todoViewModel: TodoViewModel) {
                             }
                             else {
                                 Text(
-                                    text = todo.title,
+                                    text = taskItem.title,
                                     modifier = Modifier.padding(start = 8.dp).weight(1f),
-                                    style = if (todo.isDone)
+                                    style = if (taskItem.isDone)
                                         LocalTextStyle.current.copy(
                                             textDecoration = TextDecoration.LineThrough,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
@@ -183,7 +182,7 @@ fun TodoScreen(todoViewModel: TodoViewModel) {
                         }
                         Row {
                             IconButton(onClick = {
-                                if (!isEditing) newTitle = todo.title
+                                if (!isEditing) newTitle = taskItem.title
                                 isEditing = !isEditing
                             }) {
                                 Icon(
@@ -193,7 +192,7 @@ fun TodoScreen(todoViewModel: TodoViewModel) {
                                 )
                             }
                             IconButton(onClick = {
-                                todoViewModel.deleteTodo(todo)
+                                taskViewModel.deleteTask(taskItem)
                             }) {
                                 Icon(
                                     Icons.Default.Delete,

@@ -1,4 +1,4 @@
-package marcopiomendes.cleantodoapp.ui.theme
+package marcopiomendes.tasksapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

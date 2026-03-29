@@ -1,6 +1,6 @@
-package marcopiomendes.cleantodoapp.domain
+package marcopiomendes.tasksapp.domain
 
-data class Todo(
+data class Task(
     val id: Int = 0,
     val title: String,
     val isDone: Boolean = false

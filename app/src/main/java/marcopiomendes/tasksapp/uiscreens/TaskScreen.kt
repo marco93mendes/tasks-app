@@ -14,7 +14,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
@@ -28,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -50,17 +53,52 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 fun TaskScreen(taskViewModel: TaskViewModel) {
     var taskText by remember { mutableStateOf("") }
     val taskList by taskViewModel.tasks.collectAsStateWithLifecycle()
+    var showDeleteDialog by remember { mutableStateOf(false) }
 
     val totalTasks = taskList.size
     val doneTasks = taskList.count { it.isDone }
+
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text("Clear List") },
+            text = { Text("Are you sure you want to delete all tasks? This action cannot be undone.") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        taskViewModel.clearAllTasks()
+                        showDeleteDialog = false
+                    }
+                ) {
+                    Text("Clear All", color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Tasks App") },
+                actions = {
+                    if (taskList.isNotEmpty()) {
+                        IconButton(onClick = { showDeleteDialog = true }) {
+                            Icon(
+                                imageVector = Icons.Default.DeleteSweep,
+                                contentDescription = "Clear all tasks"
+                            )
+                        }
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors (
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             )
         }

@@ -25,4 +25,8 @@ class TaskDataRepository(private val dao: TaskDao): TaskRepository {
     override suspend fun deleteTask(task: Task) {
         dao.deleteTask(TaskEntity(id = task.id, title = task.title, isDone = task.isDone))
     }
+
+    override suspend fun deleteAllTasks() {
+        dao.deleteAllTasks()
+    }
 }

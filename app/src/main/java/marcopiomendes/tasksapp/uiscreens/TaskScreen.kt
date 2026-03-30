@@ -48,6 +48,16 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
+// Cores Fixas Definidas
+private val ColorPrimary = Color(0xFF4A5C84)
+private val ColorPrimaryContainer = Color(0xFFC9D2EA)
+private val ColorOnPrimaryContainer = Color(0xFF2D3955)
+private val ColorSecondary = Color(0xFF5F6675)
+private val ColorError = Color(0xFFD64545)
+private val ColorOutline = Color(0xFF2D3955)
+private val ColorOutlineVariant = Color(0xFF5F6675)
+private val ColorOnSurfaceVariant = Color(0xFF757E91)
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun TaskScreen(taskViewModel: TaskViewModel) {
@@ -70,7 +80,7 @@ fun TaskScreen(taskViewModel: TaskViewModel) {
                         showDeleteDialog = false
                     }
                 ) {
-                    Text("Clear All", color = MaterialTheme.colorScheme.error)
+                    Text("Clear All", color = ColorError)
                 }
             },
             dismissButton = {
@@ -96,9 +106,9 @@ fun TaskScreen(taskViewModel: TaskViewModel) {
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors (
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    containerColor = ColorPrimaryContainer,
+                    titleContentColor = ColorOnPrimaryContainer,
+                    actionIconContentColor = ColorOnPrimaryContainer
                 )
             )
         }
@@ -120,8 +130,8 @@ fun TaskScreen(taskViewModel: TaskViewModel) {
                     placeholder = { Text("New Task") },
                     shape = RoundedCornerShape(22.dp),
                     colors = TextFieldDefaults.colors(
-                        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                        unfocusedIndicatorColor = MaterialTheme.colorScheme.outline,
+                        focusedIndicatorColor = ColorPrimary,
+                        unfocusedIndicatorColor = ColorOutline,
                         focusedContainerColor = Color.Transparent,
                         unfocusedContainerColor = Color.Transparent
                     )
@@ -133,7 +143,7 @@ fun TaskScreen(taskViewModel: TaskViewModel) {
                             taskText = ""
                         }
                     },
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
+                    colors = ButtonDefaults.buttonColors(ColorPrimary)
                 ) {
                     Text("Add")
                 }
@@ -150,13 +160,13 @@ fun TaskScreen(taskViewModel: TaskViewModel) {
                     text = "$doneTasks of $totalTasks completed",
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.secondary
+                        color = ColorSecondary
                     )
                 )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
-            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            HorizontalDivider(color = ColorOutlineVariant)
             Spacer(modifier = Modifier.height(12.dp))
 
             LazyColumn(
@@ -180,7 +190,7 @@ fun TaskScreen(taskViewModel: TaskViewModel) {
                             Checkbox(
                                 checked = taskItem.isDone,
                                 onCheckedChange = { taskViewModel.toggleTaskDone(taskItem) },
-                                colors = CheckboxDefaults.colors(MaterialTheme.colorScheme.primary)
+                                colors = CheckboxDefaults.colors(ColorPrimary)
                             )
                             if (isEditing) {
                                 OutlinedTextField(
@@ -189,8 +199,8 @@ fun TaskScreen(taskViewModel: TaskViewModel) {
                                     modifier = Modifier.weight(1f),
                                     shape = RoundedCornerShape(22.dp),
                                     colors = TextFieldDefaults.colors(
-                                        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                                        unfocusedIndicatorColor = MaterialTheme.colorScheme.outline
+                                        focusedIndicatorColor = ColorPrimary,
+                                        unfocusedIndicatorColor = ColorOutline
                                     )
                                 )
                                 Button(
@@ -199,7 +209,7 @@ fun TaskScreen(taskViewModel: TaskViewModel) {
                                         isEditing = false
                                     },
                                     modifier = Modifier.padding(start = 4.dp),
-                                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
+                                    colors = ButtonDefaults.buttonColors(ColorPrimary)
 
                                 ) {
                                     Text("Save")
@@ -212,7 +222,7 @@ fun TaskScreen(taskViewModel: TaskViewModel) {
                                     style = if (taskItem.isDone)
                                         LocalTextStyle.current.copy(
                                             textDecoration = TextDecoration.LineThrough,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                                            color = ColorOnSurfaceVariant.copy(alpha = 0.6f)
                                         )
                                         else LocalTextStyle.current
                                 )
@@ -226,7 +236,7 @@ fun TaskScreen(taskViewModel: TaskViewModel) {
                                 Icon(
                                     Icons.Default.Edit,
                                     contentDescription = "Edit",
-                                    tint = MaterialTheme.colorScheme.secondary
+                                    tint = ColorSecondary
                                 )
                             }
                             IconButton(onClick = {
@@ -235,7 +245,7 @@ fun TaskScreen(taskViewModel: TaskViewModel) {
                                 Icon(
                                     Icons.Default.Delete,
                                     contentDescription = "Delete",
-                                    tint = MaterialTheme.colorScheme.error
+                                    tint = ColorError
                                 )
                             }
                         }

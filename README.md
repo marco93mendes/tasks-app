@@ -23,7 +23,10 @@ The project follows **Clean Architecture** principles to ensure scalability and 
 - **Presentation Layer:** Managed by ViewModels and rendered using Jetpack Compose Screens.
 
 ## 📸 Screenshots
-*(Tip: Add your screenshots here to make it look even better!)*
+<p align="center">
+  <img src="screenshots/taskapp-1.png" width="300" title="Main Screen">
+  <img src="screenshots/taskapp-2.png" width="300" title="Task Details">
+</p>
 
 ## 📥 Getting Started
 1. Clone this repository:

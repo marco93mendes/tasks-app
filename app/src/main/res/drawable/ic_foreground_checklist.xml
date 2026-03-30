@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Papel -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#4A5C84"
+        android:strokeWidth="2"
+        android:pathData="M30,20h48a4,4 0 0 1 4,4v60a4,4 0 0 1 -4,4h-48a4,4 0 0 1 -4,-4v-60a4,4 0 0 1 4,-4z"/>
+
+    <!-- Linhas -->
+    <path
+        android:strokeColor="#5F6675"
+        android:strokeWidth="2"
+        android:pathData="M40,40h32"/>
+    <path
+        android:strokeColor="#5F6675"
+        android:strokeWidth="2"
+        android:pathData="M40,54h32"/>
+    <path
+        android:strokeColor="#5F6675"
+        android:strokeWidth="2"
+        android:pathData="M40,68h32"/>
+
+    <!-- Check 1 -->
+    <path
+        android:strokeColor="#4A5C84"
+        android:strokeWidth="2.5"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M32,38l4,4l8,-8"/>
+
+    <!-- Check 2 -->
+    <path
+        android:strokeColor="#4A5C84"
+        android:strokeWidth="2.5"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M32,52l4,4l8,-8"/>
+
+    <!-- X (pendente) -->
+    <path
+        android:strokeColor="#D64545"
+        android:strokeWidth="2.5"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M32,66l8,8M40,66l-8,8"/>
+
+</vector>
